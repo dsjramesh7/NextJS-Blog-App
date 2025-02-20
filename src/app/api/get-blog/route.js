@@ -6,7 +6,7 @@ export const GET = async () => {
   try {
     await connectToDB();
     const getAllBlogData = await Blog.find({});
-    console.log(getAllBlogData);
+    // console.log(getAllBlogData);
     if (getAllBlogData) {
       return NextResponse.json({
         success: true,
@@ -19,7 +19,7 @@ export const GET = async () => {
       });
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return NextResponse.json({
       success: false,
       message: "Something went wrong! Please try again later",

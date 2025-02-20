@@ -6,9 +6,8 @@ async function fetchAllBlogsFunction() {
       method: "GET",
       cache: "no-store",
     });
-    console.log(apiResponse);
     const result = await apiResponse.json();
-    console.log(result);
+    // console.log(result);
     return result?.data;
   } catch (error) {
     throw new Error(error);

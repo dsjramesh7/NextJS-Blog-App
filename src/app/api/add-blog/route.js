@@ -11,7 +11,7 @@ const AddNewBlog = Joi.object({
 export async function POST(req) {
   try {
     await connectToDB();
-    console.log("Connected to DB successfully");
+    // console.log("Connected to DB successfully");
     const extractedBlogData = await req.json();
     // console.log(extractedBlogData);
     const { title, description } = extractedBlogData;
@@ -34,14 +34,14 @@ export async function POST(req) {
         message: "Blog created successfully",
       });
     } else {
-      console.log("in error mode");
+      // console.log("in error mode");
       return NextResponse.json({
         success: false,
         message: "Something went wrong! Please try again",
       });
     }
   } catch (error) {
-    console.error("Error creating blog:", error);
+    // console.error("Error creating blog:", error);
     return NextResponse.json({
       success: false,
       message: error.message || "Something went wrong! Please try again",
