@@ -2,10 +2,7 @@ import mongoose from "mongoose";
 import { PASSWORD, USERNAME } from "../utils/constants";
 
 const connectToDB = async () => {
-  console.log(USERNAME);
-  console.log(PASSWORD);
-  const connectionURL = `mongodb+srv://${USERNAME}:${PASSWORD}@projects.8tiyi.mongodb.net/`;
-
+  const connectionURL = `mongodb+srv://${USERNAME}:${PASSWORD}@blogapp.4rcml.mongodb.net/`;
   mongoose
     .connect(connectionURL)
     .then(() => {

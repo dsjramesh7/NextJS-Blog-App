@@ -16,6 +16,7 @@ const AddNewBlog = ({
   setBlogFormData,
   blogFormData,
   handleSaveBlogData,
+  loading,
 }) => {
   return (
     <div>
@@ -26,7 +27,16 @@ const AddNewBlog = ({
       >
         Add New Blog
       </Button>
-      <Dialog open={openDialogBox} onOpenChange={setOpenDialogBox}>
+      <Dialog
+        open={openDialogBox}
+        onOpenChange={() => {
+          setOpenDialogBox(false);
+          setBlogFormData({
+            title: "",
+            description: "",
+          });
+        }}
+      >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Add New Blog</DialogTitle>
@@ -68,7 +78,7 @@ const AddNewBlog = ({
           </div>
           <DialogFooter>
             <Button onClick={handleSaveBlogData} type="button">
-              Submit
+              {loading ? "Save Changes" : "Submit"}
             </Button>
           </DialogFooter>
         </DialogContent>
