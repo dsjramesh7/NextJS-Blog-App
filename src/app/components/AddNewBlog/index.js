@@ -2,7 +2,6 @@ import React from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -17,6 +16,8 @@ const AddNewBlog = ({
   blogFormData,
   handleSaveBlogData,
   loading,
+  setCurrentEditedBlogID,
+  currentEditedBlogID,
 }) => {
   return (
     <div>
@@ -35,11 +36,14 @@ const AddNewBlog = ({
             title: "",
             description: "",
           });
+          setCurrentEditedBlogID(null);
         }}
       >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add New Blog</DialogTitle>
+            <DialogTitle>
+              {currentEditedBlogID !== null ? "Edit Blog" : "Add New Blog"}
+            </DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">

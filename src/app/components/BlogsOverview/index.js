@@ -19,6 +19,7 @@ const BlogsOveriew = ({ blogList }) => {
   const [openDialogBox, setOpenDialogBox] = useState(false);
   const [loading, setLoading] = useState(false);
   const [blogFormData, setBlogFormData] = useState(initialFormData);
+  const [currentEditedBlogID, setCurrentEditedBlogID] = useState(null);
   // console.log(blogFormData);
 
   const router = useRouter();
@@ -30,19 +31,26 @@ const BlogsOveriew = ({ blogList }) => {
   const handleSaveBlogData = async () => {
     try {
       setLoading(true);
-      const apiResponse = await fetch(`api/add-blog`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(blogFormData),
-      });
+      const apiResponse =
+        currentEditedBlogID !== null
+          ? await fetch(`/api/update-blog?id=${currentEditedBlogID}`, {
+              method: "PUT",
+              body: JSON.stringify(blogFormData),
+            })
+          : await fetch(`api/add-blog`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(blogFormData),
+            });
       const result = await apiResponse.json();
       // console.log(result);
       if (result?.success) {
         setBlogFormData(initialFormData);
         setLoading(false);
         setOpenDialogBox(false);
+        setCurrentEditedBlogID(null);
         router.refresh();
       }
     } catch (error) {
@@ -68,6 +76,16 @@ const BlogsOveriew = ({ blogList }) => {
       console.log(error);
     }
   };
+
+  const handleEditBlog = (singleBlog) => {
+    setCurrentEditedBlogID(singleBlog._id);
+    setBlogFormData({
+      title: singleBlog?.title,
+      description: singleBlog?.description,
+    });
+    setOpenDialogBox(true);
+  };
+  console.log(currentEditedBlogID);
   return (
     <div className="min-h-screen flex flex-col bg-black text-white gap-10 p-8">
       <AddNewBlog
@@ -78,6 +96,8 @@ const BlogsOveriew = ({ blogList }) => {
         blogFormData={blogFormData}
         setBlogFormData={setBlogFormData}
         handleSaveBlogData={handleSaveBlogData}
+        currentEditedBlogID={currentEditedBlogID}
+        setCurrentEditedBlogID={setCurrentEditedBlogID}
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
         {blogList && blogList.length > 0 ? (
@@ -87,7 +107,9 @@ const BlogsOveriew = ({ blogList }) => {
                 <CardTitle className="mb-5">{singleBlog.title}</CardTitle>
                 <CardDescription>{singleBlog.description}</CardDescription>
                 <div className="mt-5 flex justify-center items-center gap-6">
-                  <Button>Edit</Button>
+                  <Button onClick={() => handleEditBlog(singleBlog)}>
+                    Edit
+                  </Button>
                   <Button onClick={() => handleDeleteBlog(singleBlog._id)}>
                     Delete
                   </Button>
@@ -96,7 +118,9 @@ const BlogsOveriew = ({ blogList }) => {
             </Card>
           ))
         ) : (
-          <p>No Blogs Present</p>
+          <p className="text-red-400 font-bold text-3xl">
+            No Blogs Present Please Add one
+          </p>
         )}
       </div>
     </div>
